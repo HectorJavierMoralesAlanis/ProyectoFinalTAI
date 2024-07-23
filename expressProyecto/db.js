@@ -7,7 +7,7 @@ const pool = mysql.createPool({
     password:'',
     database:'proyecto',
     connectionLimit:1000,
-    dateString: true
+    dateStrings: true
 });
 
 //Promisify para usar async/await
