@@ -1,8 +1,8 @@
 Instalar express
-npm init
-Usar el entry point index.js
-npm install express
-Para correr la aplicacion de node es -> node app.js 
+  npm init
+  Usar el entry point index.js
+  npm install express
+  Para correr la aplicacion de node es -> node app.js 
 
 Instalacion para la base de datos
 npm install --save mysql2
