@@ -1,6 +1,8 @@
 Instalar express
-  \n--npm init
-  Usar el entry point index.js
+
+npm init
+
+Usar el entry point index.js
   npm install express
   Para correr la aplicacion de node es -> node app.js 
 
