@@ -1,31 +1,32 @@
 Instalar express
 
-npm init
+--npm init
 
 Usar el entry point index.js
   
-npm install express
+--npm install express
   
 Para correr la aplicacion de node es -> node app.js 
 
 Instalacion para la base de datos
-npm install --save mysql2
+--npm install --save mysql2
 
 Instalacion de cors
 
-npm install cors latest
+--npm install cors latest
 
 Instalacion de react vite
 
-npm create vite@latest
+--npm create vite@latest
 
 Para correr la aplicacion de react es -> npm run dev
 
 Instalacion de tailwindcss
 
-npm install -D tailwindcss postcss autoprefixer
+--npm install -D tailwindcss postcss autoprefixer
 
-npx tailwindcss init -p
+--npx tailwindcss init -p
 
 Instalacion bcrypt
-npm install bcrypt
+
+--npm install bcrypt
