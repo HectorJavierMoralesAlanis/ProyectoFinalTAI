@@ -12,6 +12,7 @@ Instalacion para la base de datos
 npm install --save mysql2
 
 Instalacion de cors
+
 npm install cors latest
 
 Instalacion de react vite
