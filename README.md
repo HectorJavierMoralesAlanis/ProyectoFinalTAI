@@ -9,6 +9,7 @@ Usar el entry point index.js
 Para correr la aplicacion de node es -> node app.js 
 
 Instalacion para la base de datos
+
 --npm install --save mysql2
 
 Instalacion de cors
