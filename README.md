@@ -16,6 +16,7 @@ Instalacion de cors
 npm install cors latest
 
 Instalacion de react vite
+
 npm create vite@latest
 Para correr la aplicacion de react es -> npm run dev
 
