@@ -24,6 +24,7 @@ Para correr la aplicacion de react es -> npm run dev
 Instalacion de tailwindcss
 
 npm install -D tailwindcss postcss autoprefixer
+
 npx tailwindcss init -p
 
 Instalacion bcrypt
