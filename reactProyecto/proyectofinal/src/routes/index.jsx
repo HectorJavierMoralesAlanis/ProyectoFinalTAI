@@ -1,7 +1,10 @@
 import {RouterProvider,createBrowserRouter} from "react-router-dom";
 import {useAuth} from "../provider/authProvider";
 import {ProtectedRoute} from "./ProtectedRoute";
-import Login from "../pages/Login";
+//import Login from "../pages/Login";
+import Main from "../components/main";
+import Login from "../components/login";
+import Expediente from "../components/expendiente";
 
 const Routes = ()=>{
     const {token}=useAuth();
@@ -22,11 +25,11 @@ const Routes = ()=>{
             children: [
                 {
                     path: "/",
-                    element: <div>User Home Page</div>,
+                    element: <Main></Main>,
                 },
                 {
-                    path: "/profile",
-                    element: <div>User Profile</div>,
+                    path: "/expediente",
+                    element: <Expediente></Expediente>,
                 },
                 {
                     path: "/logout",
@@ -38,7 +41,7 @@ const Routes = ()=>{
     const routesForNotAuthenticatedOnly= [
         {
             path: "/",
-            element:<div>Home Page</div>,
+            element:<Login></Login>,
         },
         {
             path: "/login",

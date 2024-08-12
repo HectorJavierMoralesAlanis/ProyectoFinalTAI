@@ -10,7 +10,9 @@ import './App.css'
 function App() {
 
   return (
-    <AuthProvider><Routes /></AuthProvider>
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
     /*<>
       <div className="h-screen w-screen flex justify-center items-center">
         <div className="w-1/2 py-4 mx-auto bg-slate-200 ">
