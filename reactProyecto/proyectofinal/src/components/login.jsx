@@ -1,10 +1,12 @@
 import {useState} from "react";
+import Users from "./users";
 
 function Login() {
     
     const [username,setUsername] = useState('');
     const [password,setPassword] = useState('');
     const [respuesta,setRespuesta ] = useState(null);
+    const [lista,setLista] = useState([]);
     //
     async function inicioS(){
         if(!username){
@@ -15,7 +17,7 @@ function Login() {
         //Los datos que se envian username y password
         const data = {username,password};
         const res = await fetch(
-            'http://127.0.0.1:3030/datos',
+            'http://127.0.0.1:3030/ingresar-datos',
             {
                 body: JSON.stringify(data),
                 method: 'POST',
@@ -26,7 +28,11 @@ function Login() {
         setRespuesta(resObj);
         setUsername('');
     }
-    
+    async function mostrar(){
+        const res = await fetch('http://127.0.0.1:3030/mostrar-users');
+        const jsonRes = await res.json();
+        setLista(jsonRes);
+    }
     //Formulario para el inicio de sesion
     return (
     <div>
@@ -63,8 +69,10 @@ function Login() {
           <button onClick={inicioS} type="submit" className="text-white bg-blue-700  hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
             Iniciar Sesion
           </button>
+          <button onClick={mostrar}>mostrar</button>
         </div>
         <h1>{respuesta ? respuesta.message:"[No]"}</h1>
+        {lista.map(item => <Users key={item.id} item={item}></Users>)}
     </div>
     )
 }
