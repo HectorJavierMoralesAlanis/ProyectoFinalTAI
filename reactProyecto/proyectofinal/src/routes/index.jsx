@@ -5,6 +5,9 @@ import {ProtectedRoute} from "./ProtectedRoute";
 import Main from "../components/main";
 import Login from "../components/login";
 import Expediente from "../components/expendiente";
+//import Users from "../components/users";
+import Register from "../components/Register";
+import Users from "../components/usuarios";
 
 const Routes = ()=>{
     const {token}=useAuth();
@@ -30,6 +33,14 @@ const Routes = ()=>{
                 {
                     path: "/expediente",
                     element: <Expediente></Expediente>,
+                },
+                {
+                    path: "/users",
+                    element: <Users></Users>
+                },
+                {
+                    path: "/register",
+                    element: <Register></Register>
                 },
                 {
                     path: "/logout",

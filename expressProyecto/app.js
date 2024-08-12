@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const dateFns = require('date-fns')
 const db = require('./db');
 const crypto = require('crypto');
 const argon2 = require('argon2');
@@ -29,7 +30,9 @@ app.get("/mostrar-users",async(req,res)=>{
             username: row.username,
             password: row.password,
             nombre: row.nombre,
-            apellidos: row.fechaDeNacimiento,
+            apellidos: row.apellidos,
+            fechaDeNacimiento: row.fechaDeNacimiento,
+            genero: row.genero,
             email: row.email,
             tipoDeUsuario: row.tipoDeUsuario,
             departamento: row.departamento,
@@ -37,9 +40,9 @@ app.get("/mostrar-users",async(req,res)=>{
             fechaDeUltimaModificacion: row.fechaDeUltimaModificacion
         };
     };
-    console.log(rowToObjR);
+    //console.log(rowToObjR);
     const jsonRes = rows.map(rowToObjR);
-    console.log(jsonRes);
+    //console.log(jsonRes);
     res.json(jsonRes);
 });
 function hashPassword(password){
@@ -51,48 +54,8 @@ function hashPassword(password){
     //return 'si';
 }
 app.post('/ingresar-datos',async(req,res)=>{
-    var passwordaux = "HOlA";
-
-    console.log(req.body);
-    //Creacion del salt y del hash
-    const salt = await bcrypt.genSalt(10);
-    const hash = crypto.createHash('sha512');
-    console.log(salt);
-    //Hash password
-    //const hashedPassword = hash.update(passwordaux+salt,'utf-8');
-    /*const isPassword=await bcrypt.compare(passwordaux,hashedPassword);
-    if(isPassword){
-        console.log('dskjfbn');
-    }else{
-        console.log('no')
-    }*/
-    const hashedPassword = await bcrypt.hash(passwordaux,salt);
-    //gen_hash = hashedPassword.digest('hex');
-    const key = pbkdf2Sync('secret','salt',100000,64,'sha512')
-    console.log("COn la funcion nueva "+key.toString('hex'));
-    //console.log('contra hash: '+gen_hash);
-    const isPassword = await bcrypt.compare(passwordaux,hashedPassword);
-    if(isPassword){
-        console.log("dskjfb");
-    }else{
-        console.log("no");
-    }
-    //Creacion del objeto hash
-    //var hash = crypto.createHash('sha512');
-    //var contra;
-    ///////
-    console.log("Contra Original: "+req.body.password);
-    //var resultado = hashPassword(req.body.password);
-    //console.log(resultado);
-    /*aux=crypto.pbkdf2(req.body.password,'salt',100000,64,'sha512',(err,derivedKey)=>{
-        if(err)throw err;
-        aux = derivedKey.toString('hex');
-        console.log("final "+ aux);
-        hashPassword();
-        return aux;
-    });*/
-    //console.log("hash contra: "+aux);
-    //////
+    req.body.password = "FaltoPassoword";
+    console.log("Nombre"+req.body.username);
 
     const hashingConfig={
         parallelism: 1,
@@ -116,12 +79,21 @@ app.post('/ingresar-datos',async(req,res)=>{
     const newpass = hashPassword(req.body.password).then(async(hash)=>{
         var nh = hash;
     
-        //console.log(newpass);
+        console.log(newpass);
         console.log(nh)
-        const {username} = req.body;
+        const username = req.body.username;
+        const nombre = req.body.nombre;
+        const apellidos = req.body.apellidos;
+        const genero = req.body.genero;
+        const fechaDeNacimiento = req.body.fechaNacimiento;
+        const email = req.body.email;
+        const tipoDeUsuario = req.body.tipoUsuario;
+        const departamento = req.body.departamento;
+        const now = new Date();
+        const fechaHoraDeRegistro =dateFns.format(now,'yyyy-MM-dd HH:mm:ss');
         const sqlCmdInsert = 
-            'INSERT INTO aux (username,password) VALUES (?,?)';
-        const p = [username,hash];
+            'INSERT INTO username (username,password,nombre,apellidos,genero,fechaDeNacimiento,email,tipoDeUsuario,departamento,fechaHoraDeRegistro,fechaDeUltimaModificacion) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+        const p = [username,hash,nombre,apellidos,genero,fechaDeNacimiento,email,tipoDeUsuario,departamento,fechaHoraDeRegistro,fechaHoraDeRegistro];
         const [result] = await db.query(sqlCmdInsert,p);
         const resObj = {
             id:result.insertId

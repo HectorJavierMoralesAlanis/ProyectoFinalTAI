@@ -1,79 +1,69 @@
-import {useState} from "react";
-import Users from "./users";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import '../styles/login.css';
+import '../styles/styles.css';
 
 function Login() {
     
-    const [username,setUsername] = useState('');
-    const [password,setPassword] = useState('');
-    const [respuesta,setRespuesta ] = useState(null);
-    const [lista,setLista] = useState([]);
-    //
-    async function inicioS(){
-        if(!username){
-            alert('Escriba un username');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [respuesta, setRespuesta] = useState(null);
+    const navigate = useNavigate();
+
+    // Usuario predefinido
+    const predefinedUser = {
+        username: "admin",
+        password: "123456",
+        nombre: "Administrador",
+        email: "admin@example.com"
+    };
+    
+    function inicioS() {
+        if (!username || !password) {
+            alert('Por favor, complete todos los campos');
             return;
         }
 
-        //Los datos que se envian username y password
-        const data = {username,password};
-        const res = await fetch(
-            'http://127.0.0.1:3030/ingresar-datos',
-            {
-                body: JSON.stringify(data),
-                method: 'POST',
-                headers: {'Content-Type':'application/json'}
-            }
-        );
-        const resObj = await res.json();
-        setRespuesta(resObj);
+        // Validar las credenciales
+        if (username === predefinedUser.username && password === predefinedUser.password) {
+            setRespuesta({ message: `Bienvenido, ${predefinedUser.nombre}` });
+            // Redirigir a la página de usuarios después de iniciar sesión
+            setTimeout(() => navigate('/usuarios'), 2000); // Navega a la página de Usuarios
+        } else {
+            setRespuesta({ message: 'Credenciales incorrectas' });
+        }
+
+        // Limpiar los campos después de intentar iniciar sesión
         setUsername('');
+        setPassword('');
     }
-    async function mostrar(){
-        const res = await fetch('http://127.0.0.1:3030/mostrar-users');
-        const jsonRes = await res.json();
-        setLista(jsonRes);
-    }
-    //Formulario para el inicio de sesion
+
     return (
-    <div>
-        
-        <div className="flex items-center justify-center">
-            <div class="relative z-0">
+        <div className="login-background">
+            <div className="container">
+                <h2 className="form-heading">Iniciar Sesión</h2>
                 <input 
-                  type="text" 
-                  id="username" 
-                  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-black appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
-                  placeholder="" 
-                  value={username}
-                  onChange={(e)=>setUsername(e.target.value)}/>
-                <label for="username" class="absolute text-sm text-black dark:text-black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-black peer-focus:dark:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">
-                    Username
-                </label>
-            </div>
-        </div>
-        <br/>
-        <div className="flex items-center justify-center">
-            <div class="relative z-0">
-                <input 
-                  type="password" 
-                  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-black appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
-                  placeholder="" 
-                  value={password}
-                  onChange={(e)=>setPassword(e.target.value)}
+                    type="text" 
+                    id="username" 
+                    className="input-field"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                 />
-                <label for="password" class="absolute text-sm text-black dark:text-black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-black peer-focus:dark:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Password</label>
+                <input 
+                    type="password" 
+                    id="password"
+                    className="input-field"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button onClick={inicioS} className="button">Iniciar Sesión</button>
+                <a onClick={() => navigate('/register')} className="link">¿No tienes una cuenta? Regístrate</a>
+                {respuesta && <p className="form-message">{respuesta.message}</p>}
             </div>
         </div>
-        <br/>
-        <div className="flex items-center justify-center">
-          <button onClick={inicioS} type="submit" className="text-white bg-blue-700  hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-            Iniciar Sesion
-          </button>
-          <button onClick={mostrar}>mostrar</button>
-        </div>
-        <h1>{respuesta ? respuesta.message:"[No]"}</h1>
-        {lista.map(item => <Users key={item.id} item={item}></Users>)}
-    </div>
-    )
+    );
 }
+
 export default Login;
