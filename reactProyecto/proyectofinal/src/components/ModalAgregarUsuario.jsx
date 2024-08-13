@@ -15,7 +15,7 @@ function ModalAgregarUsuario({ isOpen, onClose, onSave }) {
   if (!isOpen) return null;
 
   async function agregarUsuario(){
-    const data = {username,nombre,apellidos,genero,fechaNacimiento,email,username,tipoUsuario,password,departamento};
+    const data = {username,nombre,apellidos,genero,fechaNacimiento,email,tipoUsuario,password,departamento};
     const res = await fetch('http://127.0.0.1:3030/ingresar-datos',
     {
       body:JSON.stringify(data),
