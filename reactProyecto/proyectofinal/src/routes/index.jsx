@@ -8,7 +8,7 @@ import Expediente from "../components/expendiente";
 //import Users from "../components/users";
 import Register from "../components/Register";
 import Users from "../components/usuarios";
-
+import Logout from "../pages/Logout";
 const Routes = ()=>{
     const {token}=useAuth();
     const routesForPublic =[
@@ -44,7 +44,7 @@ const Routes = ()=>{
                 },
                 {
                     path: "/logout",
-                    element:<div>Logout</div>,
+                    element:<Logout/>,
                 }
             ]
         }

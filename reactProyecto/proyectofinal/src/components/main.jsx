@@ -18,8 +18,8 @@ const Main = () => {
           <ButtonLink to="/expediente" className="bg-yellow-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-yellow-600 transition duration-300 w-full">
             Gestión de Expedientes
           </ButtonLink>
-          <ButtonLink to="/expediente" className="bg-red-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-red-600 transition duration-300 w-full">
-            Gestión de Documentos
+          <ButtonLink to="/logout" className="bg-red-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-red-600 transition duration-300 w-full">
+            Logout
           </ButtonLink>
         </div>
       </aside>

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {useAuth} from "../provider/authProvider";
 import '../styles/login.css';
 import '../styles/styles.css';
 
 function Login() {
-    
+    const {setToken}=useAuth();
+    //const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [respuesta, setRespuesta] = useState(null);
@@ -18,12 +20,33 @@ function Login() {
         email: "admin@example.com"
     };
     
-    function inicioS() {
+    async function inicioS() {
+
         if (!username || !password) {
             alert('Por favor, complete todos los campos');
             return;
         }
-
+        const data = {username,password};
+        const res = await fetch(
+          'http://127.0.0.1:3030/login',
+          {
+            body: JSON.stringify(data),
+            method: 'POST',
+            headers: {'Content-Type':'application/json'}
+          }
+        );
+        const resObj = await res.json();
+        setRespuesta(resObj.message);
+        console.log(resObj);
+        if(resObj.message=="Datos Recibidos Admin"){
+            const handleLogin = ()=>{
+                setToken("this is a test token");
+                navigate("/",{replace:true});
+            };
+            setTimeout(()=>{
+                handleLogin();
+            });
+        }
         // Validar las credenciales
         if (username === predefinedUser.username && password === predefinedUser.password) {
             setRespuesta({ message: `Bienvenido, ${predefinedUser.nombre}` });

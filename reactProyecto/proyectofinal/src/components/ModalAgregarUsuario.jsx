@@ -9,12 +9,13 @@ function ModalAgregarUsuario({ isOpen, onClose, onSave }) {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [tipoUsuario, setTipoUsuario] = useState('');
+  const [password,setPassword]=useState('');
   const [departamento, setDepartamento] = useState('');
 
   if (!isOpen) return null;
 
   async function agregarUsuario(){
-    const data = {username,nombre,apellidos,genero,fechaNacimiento,email,username,tipoUsuario,departamento};
+    const data = {username,nombre,apellidos,genero,fechaNacimiento,email,username,tipoUsuario,password,departamento};
     const res = await fetch('http://127.0.0.1:3030/ingresar-datos',
     {
       body:JSON.stringify(data),
@@ -22,6 +23,7 @@ function ModalAgregarUsuario({ isOpen, onClose, onSave }) {
       headers:{'Content-Type':'application/json'}
     })
     const resObj = await res.json();
+    onClose();
   }
 
   const handleSave = () => {
@@ -92,9 +94,16 @@ function ModalAgregarUsuario({ isOpen, onClose, onSave }) {
           onChange={(e) => setTipoUsuario(e.target.value)}
         >
           <option value="" disabled>Seleccione el tipo de usuario</option>
-          <option value="administrador">Administrador</option>
+          <option value="admin">Administrador</option>
           <option value="usuario normal">Usuario Normal</option>
         </select>
+        <input
+          type="password"
+          className="input-field"
+          placeholder="Password"
+          value={password}
+          onChange={(e)=>setPassword(e.target.value)}
+        />
         <input
           type="text"
           className="input-field"

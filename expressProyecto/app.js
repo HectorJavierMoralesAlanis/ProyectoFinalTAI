@@ -54,7 +54,7 @@ function hashPassword(password){
     //return 'si';
 }
 app.post('/ingresar-datos',async(req,res)=>{
-    req.body.password = "FaltoPassoword";
+    //req.body.password = "FaltoPassoword";
     console.log("Nombre"+req.body.username);
 
     const hashingConfig={
@@ -108,14 +108,25 @@ app.post('/ingresar-datos',async(req,res)=>{
 //Ingresar a la cuenta
 app.post('/login', async(req, res) => {
     console.log(req.body.username);
+    const hashingConfig={
+        parallelism:1,
+        memoryCost: 64000,
+        timeCost:4
+    }
+    async function verifyPasswordWithHash(password,hash){
+        return await argon2.verify(hash,password,hashingConfig);
+    }
+    //const password = await verifyPasswordWithHash();
     //if(username=="")
-    const sqlCmdSelect = "SELECT * FROM username WHERE username = ? and password = ?";
-    const p = [req.body.username,req.body.password];
+    const sqlCmdSelect = "SELECT * FROM username WHERE username = ?";
+    const p = [req.body.username];
     const [result] = await db.query(sqlCmdSelect,p);
     console.log(result);
+    const password = await verifyPasswordWithHash(req.body.password,result[0]['password']);
+    console.log(password)
     if(result.length>0){
         //console.log('si');
-        if(result[0]['tipoDeUsuario']=="admin"){
+        if(result[0]['tipoDeUsuario']=="admin"&&password){
             console.log("ES ADMINISTRADOR");
             res.json({
             message: "Datos Recibidos Admin", 
