@@ -4,10 +4,12 @@ const dateFns = require('date-fns')
 const db = require('./db');
 const crypto = require('crypto');
 const argon2 = require('argon2');
-const {pbkdf2Sync} = require('crypto');
+//const {pbkdf2Sync} = require('crypto');
 const bcrypt = require('bcrypt');
 const app = express();
 const port = 3030;
+const multer = require('multer');
+const path = require('path');
 
 //Middlewares
 app.use(cors());
@@ -45,14 +47,14 @@ app.get("/mostrar-users",async(req,res)=>{
     //console.log(jsonRes);
     res.json(jsonRes);
 });
-function hashPassword(password){
-    return crypto.pbkdf2(password,'salt',100000,64,'sha512',(err,derivedKey)=>{
-        if(err)throw err;
-        return console.log("final " + derivedKey.toString('hex'));
+//function hashPassword(password){
+  //  return crypto.pbkdf2(password,'salt',100000,64,'sha512',(err,derivedKey)=>{
+    //    if(err)throw err;
+      //  return console.log("final " + derivedKey.toString('hex'));
         //return 'aux';
-    })
+    //})
     //return 'si';
-}
+//}
 app.post('/ingresar-datos',async(req,res)=>{
     //req.body.password = "FaltoPassoword";
     console.log("Nombre"+req.body.username);
@@ -143,8 +145,31 @@ app.post('/login', async(req, res) => {
     }
 });
 
+// Configuración de almacenamiento para multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/'); // Carpeta donde se guardarán los archivos subidos
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  });
+  
+  const upload = multer({ storage: storage });
+  
+  // Ruta para manejar la subida del archivo
+  app.post('/upload', upload.single('expediente'), (req, res) => {
+    try {
+      res.status(200).json({ message: 'Expediente subido correctamente', filePath: req.file.path });
+    } catch (error) {
+      res.status(500).json({ message: 'Error al subir el expediente', error });
+    }
+  });
+
+
 
 //Ejecuta la app
 app.listen(port,()=>{
     console.log(`Executandose en el puerto ${port}`);
 });
+

@@ -1,0 +1,268 @@
+2. Componentes de Expedientes
+2.1 Crear un Expediente
+Crea un componente CrearExpediente que permita a los usuarios admin crear nuevos expedientes.
+
+jsx
+Copiar código
+import React, { useState } from 'react';
+
+const CrearExpediente = ({ onCreate }) => {
+  const [expediente, setExpediente] = useState({
+    tipo: '',
+    numero: '',
+    tags: '',
+    fechaApertura: '',
+  });
+
+  const handleChange = (e) => {
+    setExpediente({
+      ...expediente,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onCreate(expediente);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="p-4 bg-white shadow-md rounded">
+      <div className="mb-4">
+        <label className="block text-gray-700">Tipo de Expediente</label>
+        <input
+          name="tipo"
+          type="text"
+          onChange={handleChange}
+          className="mt-1 block w-full border border-gray-300 rounded-md"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Número de Expediente</label>
+        <input
+          name="numero"
+          type="text"
+          onChange={handleChange}
+          className="mt-1 block w-full border border-gray-300 rounded-md"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Tags</label>
+        <input
+          name="tags"
+          type="text"
+          onChange={handleChange}
+          className="mt-1 block w-full border border-gray-300 rounded-md"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Fecha de Apertura</label>
+        <input
+          name="fechaApertura"
+          type="date"
+          onChange={handleChange}
+          className="mt-1 block w-full border border-gray-300 rounded-md"
+        />
+      </div>
+      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+        Crear Expediente
+      </button>
+    </form>
+  );
+};
+
+export default CrearExpediente;
+2.2 Modificar Expediente
+Crea un componente ModificarExpediente que permita modificar los detalles de un expediente existente.
+
+jsx
+Copiar código
+import React, { useState } from 'react';
+
+const ModificarExpediente = ({ expediente, onUpdate }) => {
+  const [updatedExpediente, setUpdatedExpediente] = useState(expediente);
+
+  const handleChange = (e) => {
+    setUpdatedExpediente({
+      ...updatedExpediente,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onUpdate(updatedExpediente);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="p-4 bg-white shadow-md rounded">
+      <div className="mb-4">
+        <label className="block text-gray-700">Tipo de Expediente</label>
+        <input
+          name="tipo"
+          type="text"
+          value={updatedExpediente.tipo}
+          onChange={handleChange}
+          className="mt-1 block w-full border border-gray-300 rounded-md"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Número de Expediente</label>
+        <input
+          name="numero"
+          type="text"
+          value={updatedExpediente.numero}
+          onChange={handleChange}
+          className="mt-1 block w-full border border-gray-300 rounded-md"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Tags</label>
+        <input
+          name="tags"
+          type="text"
+          value={updatedExpediente.tags}
+          onChange={handleChange}
+          className="mt-1 block w-full border border-gray-300 rounded-md"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Fecha de Apertura</label>
+        <input
+          name="fechaApertura"
+          type="date"
+          value={updatedExpediente.fechaApertura}
+          onChange={handleChange}
+          className="mt-1 block w-full border border-gray-300 rounded-md"
+        />
+      </div>
+      <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded">
+        Modificar Expediente
+      </button>
+    </form>
+  );
+};
+
+export default ModificarExpediente;
+2.3 Concluir Expediente
+Crea un componente ConcluirExpediente que permita concluir un expediente, solicitando la confirmación del usuario.
+
+jsx
+Copiar código
+import React from 'react';
+
+const ConcluirExpediente = ({ expediente, onConclude }) => {
+  const handleConclude = () => {
+    if (window.confirm('¿Estás seguro de que quieres concluir este expediente?')) {
+      onConclude(expediente.id);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleConclude}
+      className="bg-yellow-500 text-white py-2 px-4 rounded"
+    >
+      Concluir Expediente
+    </button>
+  );
+};
+
+export default ConcluirExpediente;
+2.4 Eliminar Expediente
+Crea un componente EliminarExpediente que permita eliminar un expediente, asegurándose de que solo los admin puedan hacerlo y confirmando la operación.
+
+jsx
+Copiar código
+import React from 'react';
+
+const EliminarExpediente = ({ expediente, onDelete }) => {
+  const handleDelete = () => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este expediente?')) {
+      onDelete(expediente.id);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleDelete}
+      className="bg-red-500 text-white py-2 px-4 rounded"
+    >
+      Eliminar Expediente
+    </button>
+  );
+};
+
+export default EliminarExpediente;
+2.5 Gestión de Permisos de Expediente
+Crea un componente GestionarPermisos que permita a los admin asignar propietarios y usuarios de solo lectura a un expediente.
+
+jsx
+Copiar código
+import React, { useState } from 'react';
+
+const GestionarPermisos = ({ expediente, usuarios, onUpdatePermisos }) => {
+  const [permisos, setPermisos] = useState({
+    propietarios: expediente.propietarios || [],
+    soloLectura: expediente.soloLectura || [],
+  });
+
+  const handlePermisoChange = (e) => {
+    const { name, value, checked } = e.target;
+    setPermisos((prev) => ({
+      ...prev,
+      [name]: checked
+        ? [...prev[name], value]
+        : prev[name].filter((v) => v !== value),
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onUpdatePermisos(expediente.id, permisos);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="p-4 bg-white shadow-md rounded">
+      <div className="mb-4">
+        <h3 className="text-gray-700">Propietarios</h3>
+        {usuarios.map((usuario) => (
+          <label key={usuario.id} className="block">
+            <input
+              type="checkbox"
+              name="propietarios"
+              value={usuario.id}
+              checked={permisos.propietarios.includes(usuario.id)}
+              onChange={handlePermisoChange}
+            />
+            {usuario.nombre}
+          </label>
+        ))}
+      </div>
+      <div className="mb-4">
+        <h3 className="text-gray-700">Usuarios de Solo Lectura</h3>
+        {usuarios.map((usuario) => (
+          <label key={usuario.id} className="block">
+            <input
+              type="checkbox"
+              name="soloLectura"
+              value={usuario.id}
+              checked={permisos.soloLectura.includes(usuario.id)}
+              onChange={handlePermisoChange}
+            />
+            {usuario.nombre}
+          </label>
+        ))}
+      </div>
+      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+        Actualizar Permisos
+      </button>
+    </form>
+  );
+};
+
+export default GestionarPermisos;
+3. Integración en la Aplicación
+Puedes integrar estos componentes en tu aplicación principal, manejando el estado global de los expedientes y los permisos usando un estado global (como Redux) o el hook useContext de React. La lógica para realizar las operaciones (crear, modificar, concluir, eliminar, y gestionar permisos) se manejaría en el backend, y el frontend realizaría peticiones a través de una API.

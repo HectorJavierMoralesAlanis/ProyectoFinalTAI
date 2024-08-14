@@ -9,6 +9,7 @@ import Expediente from "../components/expendiente";
 import Register from "../components/Register";
 import Users from "../components/usuarios";
 import Logout from "../pages/Logout";
+import Agregar from "../components/agregarExpediente";
 const Routes = ()=>{
     const {token}=useAuth();
     const routesForPublic =[
@@ -45,6 +46,10 @@ const Routes = ()=>{
                 {
                     path: "/logout",
                     element:<Logout/>,
+                },
+                {
+                    path: "/agregarExpediente",
+                    element:<Agregar/>,
                 }
             ]
         }

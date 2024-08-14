@@ -1,0 +1,84 @@
+Ecuaciones diferenciales homogeneas con coeficientes constantes
+
+import random
+import sympy as sp
+import tkinter as tk
+from tkinter import ttk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+
+# Definir las variables simbólicas globales
+y = sp.Function('y')
+t = sp.symbols('t')
+
+def generate_random_homogeneous_equation(difficulty):
+    # Ajustar rangos de coeficientes según la dificultad
+    if difficulty == 1:
+        range_min, range_max = -5, 5
+    elif difficulty == 2:
+        range_min, range_max = -10, 10
+    else:  # dificultad 3
+        range_min, range_max = -20, 20
+
+    # Generar coeficientes aleatorios
+    a = random.randint(1, range_max)
+    b = random.randint(range_min, range_max)
+    c = random.randint(range_min, range_max)
+
+    return a, b, c
+
+def solve_homogeneous_equation(a, b, c):
+    equation = a * y(t).diff(t, t) + b * y(t).diff(t) + c * y(t)
+    return sp.dsolve(equation)
+
+def on_generate():
+    difficulty = difficulty_var.get()
+    a, b, c = generate_random_homogeneous_equation(difficulty)
+    equation = sp.Eq(a * y(t).diff(t, t) + b * y(t).diff(t) + c * y(t), 0)
+    solution = solve_homogeneous_equation(a, b, c)
+
+    equation_canvas.figure.clf()
+    solution_canvas.figure.clf()
+
+    equation_ax = equation_canvas.figure.subplots()
+    solution_ax = solution_canvas.figure.subplots()
+
+    equation_ax.text(0.5, 0.5, f'${sp.latex(equation)}$', horizontalalignment='center', verticalalignment='center', fontsize=12)
+    solution_ax.text(0.5, 0.5, f'${sp.latex(solution)}$', horizontalalignment='center', verticalalignment='center', fontsize=12)
+
+    equation_ax.axis('off')
+    solution_ax.axis('off')
+
+    equation_canvas.draw()
+    solution_canvas.draw()
+
+# Crear ventana principal
+root = tk.Tk()
+root.title("Generador y Solucionador de Ecuaciones Diferenciales")
+
+# Variables
+difficulty_var = tk.IntVar(value=1)
+
+# Widgets
+difficulty_label = tk.Label(root, text="Selecciona la dificultad (1-3):")
+difficulty_label.pack()
+
+difficulty_scale = tk.Scale(root, from_=1, to=3, orient="horizontal", variable=difficulty_var)
+difficulty_scale.pack()
+
+generate_button = tk.Button(root, text="Generar y Resolver Ecuación", command=on_generate)
+generate_button.pack()
+
+# Crear canvas para ecuaciones
+equation_figure = Figure(figsize=(5, 1), dpi=100)
+equation_canvas = FigureCanvasTkAgg(equation_figure, master=root)
+equation_canvas_widget = equation_canvas.get_tk_widget()
+equation_canvas_widget.pack()
+
+solution_figure = Figure(figsize=(5, 1), dpi=100)
+solution_canvas = FigureCanvasTkAgg(solution_figure, master=root)
+solution_canvas_widget = solution_canvas.get_tk_widget()
+solution_canvas_widget.pack()
+
+# Ejecutar la aplicación
+root.mainloop()
