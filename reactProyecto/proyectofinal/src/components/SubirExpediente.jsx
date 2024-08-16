@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importar el hook useNavigate
+import { useNavigate,Link } from 'react-router-dom'; // Importar el hook useNavigate
 import axios from 'axios';
+
+function ButtonLink(){
+  return <Link></Link>
+}
 
 const SubirExpediente = ({ onUpload }) => {
   const [file, setFile] = useState(null);
@@ -9,6 +13,7 @@ const SubirExpediente = ({ onUpload }) => {
     tag: '',
     fechaCreacion: '',
     tipo: '',
+    descripcion:'',
   });
 
   const navigate = useNavigate(); // Inicializar el hook useNavigate
@@ -32,7 +37,8 @@ const SubirExpediente = ({ onUpload }) => {
       Object.keys(formData).forEach((key) => {
         uploadData.append(key, formData[key]);
       });
-
+      //const user = 'aux';
+      //const data = {user};
       // Llamada a la función onUpload, que debería manejar el proceso de subir el archivo y el formulario
       onUpload(uploadData);
     } else {
@@ -58,6 +64,18 @@ const SubirExpediente = ({ onUpload }) => {
           placeholder="Nombre"
           required
         />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Descripcion</label>
+        <input
+          type="text"
+          name="descripcion"
+          value={formData.descripcion}
+          onChange={handleInputChange}
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          placeholder="Descripcion"
+          required
+        ></input>
       </div>
       <div className="mb-4">
         <label className="block text-gray-700">Seleccione el tag</label>

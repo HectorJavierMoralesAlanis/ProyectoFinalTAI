@@ -2,7 +2,11 @@ import React, { useState,useEffect } from "react";
 import ModalAgregarUsuario from "./ModalAgregarUsuario";
 import ModalEditarUsuario from "./ModalEditarUsuario";
 import '../styles/usuarios.css';
+import {Link} from 'react-router-dom';
 
+function ButtonLink({to,children,className}){
+    return <Link to={to} className={className}>{children}</Link>
+}
 function Usuarios() {
     const [usuarios, setUsuarios] = useState([]);
     const [respuesta, setRespuesta] = useState(null);
@@ -81,7 +85,9 @@ function Usuarios() {
                     ))}
                 </tbody>
             </table>
-
+            <ButtonLink to="/" className="button-action">
+                Regresar
+            </ButtonLink>
             <ModalAgregarUsuario
                 isOpen={isAgregarModalOpen}
                 onClose={() => setIsAgregarModalOpen(false)}

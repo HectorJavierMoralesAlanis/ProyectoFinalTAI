@@ -12,13 +12,13 @@ function Login() {
     const [respuesta, setRespuesta] = useState(null);
     const navigate = useNavigate();
 
-    // Usuario predefinido
+    /* Usuario predefinido
     const predefinedUser = {
         username: "admin",
         password: "123456",
         nombre: "Administrador",
         email: "admin@example.com"
-    };
+    };*/
     
     async function inicioS() {
 
@@ -47,14 +47,14 @@ function Login() {
                 handleLogin();
             });
         }
-        // Validar las credenciales
+        /* Validar las credenciales
         if (username === predefinedUser.username && password === predefinedUser.password) {
             setRespuesta({ message: `Bienvenido, ${predefinedUser.nombre}` });
             // Redirigir a la página de usuarios después de iniciar sesión
             setTimeout(() => navigate('/usuarios'), 2000); // Navega a la página de Usuarios
         } else {
             setRespuesta({ message: 'Credenciales incorrectas' });
-        }
+        }*/
 
         // Limpiar los campos después de intentar iniciar sesión
         setUsername('');

@@ -10,6 +10,7 @@ const app = express();
 const port = 3030;
 const multer = require('multer');
 const path = require('path');
+const {v4:uuidv4} = require('uuid');
 
 //Middlewares
 app.use(cors());
@@ -158,7 +159,16 @@ const storage = multer.diskStorage({
   const upload = multer({ storage: storage });
   
   // Ruta para manejar la subida del archivo
-  app.post('/upload', upload.single('expediente'), (req, res) => {
+  app.post('/upload', upload.single('expediente'), async(req, res) => {
+    console.log(req.file);
+    console.log(req.body.nombre);
+    console.log(uuidv4());
+    const url = "none";
+    const now = new Date();
+    const fechaHoraDeRegistro = dateFns.format(now,'yyyy-MM-dd HH:mm:ss');
+    const sqlCmdInsert = 'INSERT INTO documentos (clave_unica,titulo_del_documento,descripcion_del_documento,fecha_del_documento,tipo_de_archivo,size,nombre_original,url,sha256,fecha_hora_regitro) VALUES (?,?,?,?,?,?,?,?,?,?)';
+    const parametros = [req.file.filename,req.body.nombre,req.body.descripcion,req.body.fechaCreacion,req.body.tipo,req.file.size,req.file.originalname,url,uuidv4(),fechaHoraDeRegistro];
+    const [result] = await db.query(sqlCmdInsert,parametros)
     try {
       res.status(200).json({ message: 'Expediente subido correctamente', filePath: req.file.path });
     } catch (error) {

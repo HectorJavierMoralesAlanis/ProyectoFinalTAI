@@ -1,0 +1,2 @@
+Middleware
+request-> hhtp ->Middeware auth -> middleware log ->Manejador principal de la peticion->regresa la respuesta
