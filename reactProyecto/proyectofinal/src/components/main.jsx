@@ -1,10 +1,27 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function ButtonLink({to,children,className}){
   return <Link to={to}><button className={className}>{children}</button></Link>
 }
 const Main = () => {
+  const [archivos, setArchivos] = useState([]);
+
+  useEffect(() => {
+    // Solicitud para obtener los documentos
+    const fetchArchivos = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/documentos');
+        const data = await response.json();
+        setArchivos(data);
+      } catch (error) {
+        console.error('Error al obtener los archivos:', error);
+      }
+    };
+
+    fetchArchivos();
+  }, []);
+
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       <aside className="w-64 bg-white dark:bg-gray-800 p-6 shadow-lg">
@@ -19,7 +36,7 @@ const Main = () => {
           <ButtonLink to="/expediente" className="bg-yellow-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-yellow-600 transition duration-300 w-full">
             Gestión de Expedientes
           </ButtonLink>
-          <ButtonLink to="/expediente" className="bg-green-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-green-600 transition duration-300 w-full">
+          <ButtonLink to="/gestionDocumentos" className="bg-green-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-green-600 transition duration-300 w-full">
             Documentos
           </ButtonLink>
           <ButtonLink to="/logout" className="bg-red-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-red-600 transition duration-300 w-full">
@@ -40,7 +57,33 @@ const Main = () => {
         <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-300 mb-4">Todos los archivos</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* elementos de archivo */}
+          {archivos.map((archivo) => (
+            <div key={archivo.id} className="p-4 bg-white dark:bg-gray-700 shadow-md rounded-md">
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200">{archivo.titulo}</h3>
+              <p className="text-gray-600 dark:text-gray-400">{archivo.descripcion}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-300">Fecha: {new Date(archivo.fecha).toLocaleDateString()}</p>
+              {archivo.archivo && (
+                <a
+                  href={`http://localhost:5000/uploads/${archivo.archivo}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 dark:text-blue-300 hover:underline"
+                >
+                  Ver archivo
+                </a>
+              )}
+              {archivo.url && (
+                <a
+                  href={archivo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 dark:text-blue-300 hover:underline"
+                >
+                  Ver URL
+                </a>
+              )}
+            </div>
+          ))}
         </div>
       </main>
     </div>

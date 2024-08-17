@@ -1,15 +1,16 @@
 import {RouterProvider,createBrowserRouter} from "react-router-dom";
 import {useAuth} from "../provider/authProvider";
 import {ProtectedRoute} from "./ProtectedRoute";
-//import Login from "../pages/Login";
+import Login from "../pages/Login";
 import Main from "../components/main";
-import Login from "../components/login";
+//import Login from "../components/login";
 import Expediente from "../components/expendiente";
 //import Users from "../components/users";
 import Register from "../components/Register";
 import Users from "../components/usuarios";
 import Logout from "../pages/Logout";
 import Agregar from "../components/agregarExpediente";
+import GestionDocumentos from "../components/gestionDocumentos";
 const Routes = ()=>{
     const {token}=useAuth();
     const routesForPublic =[
@@ -50,6 +51,10 @@ const Routes = ()=>{
                 {
                     path: "/agregarExpediente",
                     element:<Agregar/>,
+                },
+                {
+                    path: "/gestionDocumentos",
+                    element: <GestionDocumentos></GestionDocumentos>
                 }
             ]
         }
