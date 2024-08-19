@@ -7,21 +7,36 @@
 }
 
  function Expediente() {
+   const [nombreExpediente, setNombreExpediente] = useState("");
+   const [documento,setDocumento]= useState("");
    const [tipoExpediente, setTipoExpediente] = useState("");
    const [numeroExpediente, setNumeroExpediente] = useState("");
    const [tags, setTags] = useState([]);
    const [expedientes, setExpedientes] = useState([]);
    const [editIndex, setEditIndex] = useState(null);
    const [mostrarModal, setMostrarModal] = useState(false);
+   const [documentos,setDocumentos] = useState([]);
 
    useEffect(() => {
      async function fetchExpedientes() {
-       const res = await fetch("http://127.0.0.1:3030/expediente");
+       const res = await fetch("http://127.0.0.1:3030/documentos");
        const data = await res.json();
        setExpedientes(data);
      }
      fetchExpedientes();
    }, []);
+   
+   useEffect(()=>{
+    console.log("gfdgjkb")
+    async function fetchDocumentos(){
+      const response = await fetch("http://127.0.0.1:3030/documentos");
+      const data = await response.json();
+      
+      console.log(data);
+      setDocumentos(data);
+    };
+    fetchDocumentos();
+   },[]);
 
    async function guardarExpediente() {
      if (!tipoExpediente || !numeroExpediente) {
@@ -46,6 +61,7 @@
        setExpedientes([...expedientes, data]);
      }
 
+     setNombreExpediente("");
      setTipoExpediente("");
      setNumeroExpediente("");
      setTags([]);
@@ -131,7 +147,40 @@
              </div>
 
              <div className="grid grid-cols-1 gap-4">
+              <div className="relative z-0 w-full mb-6 group">
+                 <input
+                   type="text"
+                   id="nombre"
+                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   placeholder=" "
+                   value={nombreExpediente}
+                   onChange={(e) => setNombreExpediente(e.target.value)}
+                 />
+                 <label
+                   htmlFor="numeroExpediente"
+                   className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                 >
+                   Nombre de Expediente
+                 </label>
+               </div>
                <div className="relative z-0 w-full mb-6 group">
+                 <input
+                   type="text"
+                   id="numeroExpediente"
+                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   placeholder=" "
+                   value={numeroExpediente}
+                   onChange={(e) => setNumeroExpediente(e.target.value)}
+                 />
+                 <label
+                   htmlFor="numeroExpediente"
+                   className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                 >
+                   Número de Expediente
+                 </label>
+               </div>
+               <div className="relative z-0 w-full mb-6 group">
+                 
                  <select
                    id="tipoExpediente"
                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -150,7 +199,28 @@
                    Tipo de Expediente
                  </label>
                </div>
-
+               <div className="relative z-0 w-full mb-6 group">
+                 
+                 <select
+                   id="documento"
+                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   value={documento}
+                   onChange={(e) => setDocumento(e.target.value)}
+                 >
+                  <option value="" disabled hidden>Selecciona un tipo</option>
+                  {documentos.map((documentoN)=>(
+                    <option key={documentoN.id} value={documentoN.titulo_del_documento}>{documentoN.titulo_del_documento}</option>
+                  ))}
+                
+                 </select>
+                 <label
+                   htmlFor="tipoExpediente"
+                   className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                 >
+                   Tipo de Expediente
+                 </label>
+               </div>
+        
                <div className="relative z-0 w-full mb-6 group">
                  <input
                    type="text"
