@@ -66,7 +66,7 @@ const Main = () => {
               <p className="text-sm text-gray-500 dark:text-gray-300">Fecha: {new Date(archivo.fecha_del_documento).toLocaleDateString()}</p>
               {archivo.archivo && (
                 <a
-                  href={`http://127.0.0.1:3030/uploads/${archivo.archivo}`}
+                  href={`http://127.0.0.1:3030/uploads/${archivo.clave_unica}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-500 dark:text-blue-300 hover:underline"
