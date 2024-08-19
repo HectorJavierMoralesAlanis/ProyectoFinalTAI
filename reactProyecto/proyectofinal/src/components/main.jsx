@@ -38,7 +38,7 @@ const Main = () => {
           <ButtonLink to="/expediente" className="bg-yellow-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-yellow-600 transition duration-300 w-full">
             Gestión de Expedientes
           </ButtonLink>
-          <ButtonLink to="/gestionDocumentos" className="bg-green-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-green-600 transition duration-300 w-full">
+          <ButtonLink to="/documentos" className="bg-green-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-green-600 transition duration-300 w-full">
             Documentos
           </ButtonLink>
           <ButtonLink to="/logout" className="bg-red-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-red-600 transition duration-300 w-full">
@@ -61,7 +61,7 @@ const Main = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {archivos.map((archivo) => (
             <div key={archivo.id} className="p-4 bg-white dark:bg-gray-700 shadow-md rounded-md">
-              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200">{archivo.id}</h3>
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200">{archivo.titulo_del_documento}</h3>
               <p className="text-gray-600 dark:text-gray-400">{archivo.descripcion}</p>
               <p className="text-sm text-gray-500 dark:text-gray-300">Fecha: {new Date(archivo.fecha_del_documento).toLocaleDateString()}</p>
               {archivo.archivo && (

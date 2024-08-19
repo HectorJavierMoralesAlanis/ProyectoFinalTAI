@@ -10,7 +10,7 @@ import Register from "../components/Register";
 import Users from "../components/usuarios";
 import Logout from "../pages/Logout";
 import Agregar from "../components/agregarExpediente";
-import GestionDocumentos from "../components/gestionDocumentos";
+import Documentos from "../components/documentos";
 const Routes = ()=>{
     const {token}=useAuth();
     const routesForPublic =[
@@ -53,8 +53,8 @@ const Routes = ()=>{
                     element:<Agregar/>,
                 },
                 {
-                    path: "/gestionDocumentos",
-                    element: <GestionDocumentos></GestionDocumentos>
+                    path: "/documentos",
+                    element: <Documentos></Documentos>
                 }
             ]
         }

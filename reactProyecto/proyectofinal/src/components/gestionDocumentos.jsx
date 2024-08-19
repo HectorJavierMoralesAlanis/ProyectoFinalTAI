@@ -1,125 +1,152 @@
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 
-function GestionDocumentos() {
-  const [documentos, setDocumentos] = useState([]);
-  const [nuevoDocumento, setNuevoDocumento] = useState({
-    titulo: '',
-    descripcion: '',
-    fecha: '',
-    tipoArchivo: '',
-    archivo: null,
+const GestionDocumentos = ({onUpload})=>{
+  const [file, setFile] = useState(null);
+  const [formData, setFormData] = useState({
+    nombre: '',
+    tag: '',
+    fechaCreacion: '',
+    tipo: '',
+    descripcion:'',
+    tipoArchivo:'',
+    file: null,
     url: '',
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNuevoDocumento({ ...nuevoDocumento, [name]: value });
-  };
+  const navigate = useNavigate(); // Inicializar el hook useNavigate
 
   const handleFileChange = (e) => {
-    setNuevoDocumento({ ...nuevoDocumento, archivo: e.target.files[0] });
+    setFile(e.target.files[0]);
   };
 
-  const handleAgregarDocumento = async () => {
-    const formData = new FormData();
-    formData.append('titulo', nuevoDocumento.titulo);
-    formData.append('descripcion', nuevoDocumento.descripcion);
-    formData.append('fecha', nuevoDocumento.fecha);
-    formData.append('url', nuevoDocumento.url);
-    if (nuevoDocumento.archivo) {
-      formData.append('archivo', nuevoDocumento.archivo);
-    }
-  
-    try {
-      const response = await fetch('http://localhost:5000/upload', {
-        method: 'POST',
-        body: formData,
-      });
-  
-      const result = await response.json();
-      console.log(result.message); // Mostrar mensaje de éxito
-    } catch (error) {
-      console.error('Error al agregar documento:', error);
-    }
-  
-    setNuevoDocumento({
-      titulo: '',
-      descripcion: '',
-      fecha: '',
-      tipoArchivo: '',
-      archivo: null,
-      url: '',
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
   };
-  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (file) {
+      const uploadData = new FormData();
+      uploadData.append('expediente', file);
+      Object.keys(formData).forEach((key) => {
+        uploadData.append(key, formData[key]);
+      });
+      //const user = 'aux';
+      //const data = {user};
+      // Llamada a la función onUpload, que debería manejar el proceso de subir el archivo y el formulario
+      onUpload(uploadData);
+    } else {
+      alert('Por favor selecciona un archivo');
+    }
+  };
+
+  const handleCancel = () => {
+    navigate(-1); // Redirige a la página anterior
+  };
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-center text-primary mb-4">Gestión de Documentos</h2>
-      
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-muted-foreground">Título del Documento</label>
-        <input
-          type="text"
-          name="titulo"
-          value={nuevoDocumento.titulo}
-          onChange={handleInputChange}
-          className="mt-1 block w-full border border-border rounded-md p-2"
-        />
-      </div>
+    <form className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-center text-primary mb-4">Gestión de Documentos</h2>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-muted-foreground">Título del Documento</label>
+          <input
+            type="text"
+            name="nombre"
+            value={formData.nombre}
+            onChange={handleInputChange}
+            className="mt-1 block w-full border border-border rounded-md p-2"
+          />
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-muted-foreground">Descripción</label>
-        <textarea
-          name="descripcion"
-          value={nuevoDocumento.descripcion}
-          onChange={handleInputChange}
-          className="mt-1 block w-full border border-border rounded-md p-2"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-muted-foreground">Fecha del Documento</label>
-        <input
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-muted-foreground">Descripción</label>
+          <textarea
+            type="text"
+            name="descripcion"
+            value={formData.descripcion}
+            onChange={handleInputChange}
+            className="mt-1 block w-full border border-border rounded-md p-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-muted-foreground">Tag</label>
+          <input
+            type="text"
+            name="tag"
+            value={formData.tag}
+            onChange={handleInputChange}
+            className="mt-1 block w-full border border-border rounded-md p-2"
+          />
+        </div>
+    
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-muted-foreground">Fecha del Documento</label>
+          <input
           type="date"
-          name="fecha"
-          value={nuevoDocumento.fecha}
+          name="fechaCreacion"
+          value={formData.fechaCreacion}
           onChange={handleInputChange}
-          className="mt-1 block w-full border border-border rounded-md p-2"
+          className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          required
         />
-      </div>
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-muted-foreground">Tipo</label>
+          <input
+            type="text"
+            name="tipo"
+            value={formData.tipo}
+            onChange={handleInputChange}
+            className="mt-1 block w-full border border-border rounded-md p-2"
+          />
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-muted-foreground">Subir Archivo</label>
-        <input
-          type="file"
-          name="archivo"
-          accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.tiff,.gif"
-          onChange={handleFileChange}
-          className="mt-1 block w-full border border-border rounded-md p-2"
-        />
-      </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-muted-foreground">Subir Archivo</label>
+          <input
+            type="file"
+            name="file"
+            accept=".pdf,.doc,.txt,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.tiff,.gif"
+            onChange={handleFileChange}
+            className="mt-1 block w-full border border-border rounded-md p-2"
+          />
+        </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-muted-foreground">O URL del Documento</label>
-        <input
-          type="url"
-          name="url"
-          value={nuevoDocumento.url}
-          onChange={handleInputChange}
-          className="mt-1 block w-full border border-border rounded-md p-2"
-        />
-      </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-muted-foreground">O URL del Documento</label>
+          <input
+            type="url"
+            name="url"
+            value={formData.url}
+            onChange={handleInputChange}
+            className="mt-1 block w-full border border-border rounded-md p-2"
+          />
+        </div>
 
-      <div className="text-center">
+        <div className="text-center">
+          <button
+            onClick={handleSubmit}
+            className="bg-blue-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-blue-600 transition duration-300 w-full"
+          >
+            Agregar Documento
+          </button>
+        </div>
+        <br></br>
         <button
-          onClick={handleAgregarDocumento}
-          className="bg-red-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-red-600 transition duration-300 w-full"
-        >
-          Agregar Documento
-        </button>
-      </div>
-    </div>
+            onClick={handleCancel}
+            className="bg-red-500 text-white font-semibold p-3 rounded-md shadow-md hover:bg-red-600 transition duration-300 w-full"
+          >
+            Cancelar
+          </button>
+        
+    </form>
+    
+
+    
   );
-}
+};
 
 export default GestionDocumentos;
