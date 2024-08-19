@@ -175,8 +175,44 @@ const storage = multer.diskStorage({
       res.status(500).json({ message: 'Error al subir el expediente', error });
     }
   });
+// Endpoint para obtener la lista de documentos
+app.get('/documentos', async(req, res) => {
+    const query = 'SELECT * FROM documentos';
+    const [rows,filds] = await db.query(query);
 
-
+    const rowToObjR = row =>{
+        return {
+            id:row.id,
+            clave_unica: row.clave_unica,
+            titulo_del_documento: row.titulo_del_documento,
+            descripcion_del_documento: row.descripcion_del_documento,
+            fecha_del_documento: row.fecha_del_documento,
+            tipo_de_archivo: row.tipo_de_archivo,
+            size: row.size,
+            nombre_original: row.nombre_original,
+            url: row.url,
+            sha256: row.sha256,
+            fecha_hora_registro: row.fecha_hora_registro, 
+        };
+    };
+    const jsonRes = rows.map(rowToObjR);
+    console.log(jsonRes)
+    res.json(jsonRes);
+    
+//    console.log(results);
+//    res.json(results);
+    /*
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error('Error al obtener documentos:', err);
+        res.status(500).json({ error: 'Error al obtener documentos' });
+        return;
+      }
+      
+      res.json(results);
+    });*/
+  });
+  
 
 //Ejecuta la app
 app.listen(port,()=>{

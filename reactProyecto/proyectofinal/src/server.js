@@ -22,41 +22,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Configuración de la base de datos
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'proyecto',
-});
-
-db.connect((err) => {
-  if (err) throw err;
-  console.log('Conectado a la base de datos');
-});
-
-// Endpoint para subir documentos
-app.post('/upload', upload.single('archivo'), (req, res) => {
-  const { titulo, descripcion, fecha, url } = req.body;
-  const archivo = req.file ? req.file.filename : null;
-
-  const query = 'INSERT INTO documentos (titulo, descripcion, fecha, tipoArchivo, archivo, url, fechaHoraRegistro) VALUES (?, ?, ?, ?, ?, ?, ?)';
-  const values = [
-    titulo,
-    descripcion,
-    fecha,
-    archivo ? req.file.mimetype : 'URL',
-    archivo,
-    url,
-    new Date().toISOString()
-  ];
-
-  db.query(query, values, (err, result) => {
-    if (err) throw err;
-    res.json({ message: 'Documento agregado', id: result.insertId });
-  });
-});
-
 // Configurar directorio de archivos subidos
 app.use('/uploads', express.static('uploads'));
 

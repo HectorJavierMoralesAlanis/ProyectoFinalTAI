@@ -11,8 +11,10 @@ const Main = () => {
     // Solicitud para obtener los documentos
     const fetchArchivos = async () => {
       try {
-        const response = await fetch('http://localhost:5000/documentos');
+        const response = await fetch('http://127.0.0.1:3030/documentos');
         const data = await response.json();
+        //console.log('dsfj')
+        console.log(data);
         setArchivos(data);
       } catch (error) {
         console.error('Error al obtener los archivos:', error);
@@ -59,12 +61,12 @@ const Main = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {archivos.map((archivo) => (
             <div key={archivo.id} className="p-4 bg-white dark:bg-gray-700 shadow-md rounded-md">
-              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200">{archivo.titulo}</h3>
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200">{archivo.id}</h3>
               <p className="text-gray-600 dark:text-gray-400">{archivo.descripcion}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-300">Fecha: {new Date(archivo.fecha).toLocaleDateString()}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-300">Fecha: {new Date(archivo.fecha_del_documento).toLocaleDateString()}</p>
               {archivo.archivo && (
                 <a
-                  href={`http://localhost:5000/uploads/${archivo.archivo}`}
+                  href={`http://127.0.0.1:3030/uploads/${archivo.archivo}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-500 dark:text-blue-300 hover:underline"
