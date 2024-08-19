@@ -62,7 +62,7 @@ const Main = () => {
           {archivos.map((archivo) => (
             <div key={archivo.id} className="p-4 bg-white dark:bg-gray-700 shadow-md rounded-md">
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200">{archivo.titulo_del_documento}</h3>
-              <p className="text-gray-600 dark:text-gray-400">{archivo.descripcion}</p>
+              <p className="text-gray-600 dark:text-gray-400">{archivo.descripcion_del_documento}</p>
               <p className="text-sm text-gray-500 dark:text-gray-300">Fecha: {new Date(archivo.fecha_del_documento).toLocaleDateString()}</p>
               {archivo.archivo && (
                 <a
