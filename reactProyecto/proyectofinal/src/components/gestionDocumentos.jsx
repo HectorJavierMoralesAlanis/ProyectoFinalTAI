@@ -5,6 +5,7 @@ const GestionDocumentos = ({onUpload})=>{
   const [file, setFile] = useState(null);
   const [formData, setFormData] = useState({
     nombre: '',
+    expediente: '',
     tag: '',
     fechaCreacion: '',
     tipo: '',
@@ -56,6 +57,16 @@ const GestionDocumentos = ({onUpload})=>{
             type="text"
             name="nombre"
             value={formData.nombre}
+            onChange={handleInputChange}
+            className="mt-1 block w-full border border-border rounded-md p-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-muted-foreground">Expediente</label>
+          <input
+            type="text"
+            name="expediente"
+            value={formData.expediente}
             onChange={handleInputChange}
             className="mt-1 block w-full border border-border rounded-md p-2"
           />

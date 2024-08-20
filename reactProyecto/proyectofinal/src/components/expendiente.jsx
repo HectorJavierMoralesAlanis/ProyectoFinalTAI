@@ -248,7 +248,7 @@
                <th className="px-6 py-2 text-gray-500 text-left">Número de Expediente</th>
                <th className="px-6 py-2 text-gray-500 text-left">Status</th>
                <th className="px-6 py-2 text-gray-500 text-left">Ultima actualización</th>
-               <th className="px-6 py-2 text-gray-500 text-left">Acceso</th>
+               {/*<th className="px-6 py-2 text-gray-500 text-left">Acceso</th>*/}
                <th className="px-6 py-2 text-gray-500 text-left">Acciones</th>
              </tr>
            </thead>
@@ -262,12 +262,13 @@
                    <td className="px-6 py-4">{expediente.ultimaModificacion}</td>
                    {/*<td className="px-6 py-4">{expediente.acceso}</td>*/}
                    <td className="px-6 py-4 flex space-x-4">
-                     <button
-                       onClick={() => editarExpediente(index)}
+                     <ButtonLink
+                       to="/documentos"
+                       //onClick={() => editarExpediente(index)}
                        className="text-blue-600 hover:text-blue-900"
                      >
-                       Editar
-                     </button>
+                       Agregar Documento
+                     </ButtonLink>
                      <button
                        onClick={() => eliminarExpediente(index)}
                        className="text-red-600 hover:text-red-900"
