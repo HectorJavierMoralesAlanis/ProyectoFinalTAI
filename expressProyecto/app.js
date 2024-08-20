@@ -196,6 +196,34 @@ app.post('/upload', upload.single('expediente'), async (req, res) => {
     }
 });
 
+//Ruta expediente
+app.post('/expediente',async(req,res)=>{
+    const now = new Date();
+    const fechaHoraDeRegistro = dateFns.format(now,'yyyy-MM-dd HH:mm:ss');
+    const tags = (req.body.tags.toString());
+    //const tags= {"tags":req.body.tags}
+    //console.log(aux)
+    const sqlCmdInsert = 'INSERT INTO expedientes (tipo,numero_expediente,tags,fecha_de_apertura,fecha_de_modificacion) VALUES (?,?,?,?,?)';
+    const parametros = [req.body.tipoExpediente,req.body.numeroExpediente,tags,fechaHoraDeRegistro,fechaHoraDeRegistro];
+    
+    const [result] = await db.query(sqlCmdInsert,parametros);
+})
+
+app.get('/expedientes',async(req,res)=>{
+    const query = 'SELECT * FROM expedientes';
+    const [rows,fields] = await db.query(query);
+    const rowToObjR = row =>{
+        return {
+            id: row.id,
+            tipo: row.tipo,
+            numeroExpediente: row.numero_expediente,
+            tags: row.tags,
+            ultimaModificacion: row.fecha_de_modificacion
+        }
+    }
+    const jsonRes =rows.map(rowToObjR);
+    res.json(jsonRes);
+})
 // Endpoint para obtener la lista de documentos
 app.get('/documentos', async (req, res) => {
     const query = 'SELECT * FROM documentos';

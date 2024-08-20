@@ -7,11 +7,11 @@
 }
 
  function Expediente() {
-   const [nombreExpediente, setNombreExpediente] = useState("");
-   const [documento,setDocumento]= useState("");
+   //Modal del expediente inicio
    const [tipoExpediente, setTipoExpediente] = useState("");
    const [numeroExpediente, setNumeroExpediente] = useState("");
    const [tags, setTags] = useState([]);
+   //Modal del expediente final
    const [expedientes, setExpedientes] = useState([]);
    const [editIndex, setEditIndex] = useState(null);
    const [mostrarModal, setMostrarModal] = useState(false);
@@ -19,13 +19,13 @@
 
    useEffect(() => {
      async function fetchExpedientes() {
-       const res = await fetch("http://127.0.0.1:3030/documentos");
+       const res = await fetch("http://127.0.0.1:3030/expedientes");
        const data = await res.json();
        setExpedientes(data);
      }
      fetchExpedientes();
    }, []);
-   
+   /*
    useEffect(()=>{
     console.log("gfdgjkb")
     async function fetchDocumentos(){
@@ -36,14 +36,14 @@
       setDocumentos(data);
     };
     fetchDocumentos();
-   },[]);
+   },[]);*/
 
    async function guardarExpediente() {
      if (!tipoExpediente || !numeroExpediente) {
        alert("Completa todos los campos");
        return;
      }
-
+     console.log(tags);
      const nuevoExpediente = { tipoExpediente, numeroExpediente, tags };
 
      if (editIndex !== null) {
@@ -61,7 +61,7 @@
        setExpedientes([...expedientes, data]);
      }
 
-     setNombreExpediente("");
+     //setNombreExpediente("");
      setTipoExpediente("");
      setNumeroExpediente("");
      setTags([]);
@@ -144,80 +144,24 @@
              </div>
 
              <div className="grid grid-cols-1 gap-4">
+              {/*Tipo de expediente*/}
               <div className="relative z-0 w-full mb-6 group">
                  <input
                    type="text"
-                   id="nombre"
+                   id="tipo"
                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                    placeholder=" "
-                   value={nombreExpediente}
-                   onChange={(e) => setNombreExpediente(e.target.value)}
-                 />
-                 <label
-                   htmlFor="numeroExpediente"
-                   className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                 >
-                   Nombre de Expediente
-                 </label>
-               </div>
-               <div className="relative z-0 w-full mb-6 group">
-                 <input
-                   type="text"
-                   id="numeroExpediente"
-                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                   placeholder=" "
-                   value={numeroExpediente}
-                   onChange={(e) => setNumeroExpediente(e.target.value)}
-                 />
-                 <label
-                   htmlFor="numeroExpediente"
-                   className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                 >
-                   Número de Expediente
-                 </label>
-               </div>
-               <div className="relative z-0 w-full mb-6 group">
-                 
-                 <select
-                   id="tipoExpediente"
-                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                    value={tipoExpediente}
                    onChange={(e) => setTipoExpediente(e.target.value)}
-                 >
-                   <option value="" disabled hidden>Seleccione un tipo</option>
-                   <option value="ABC">ABC</option>
-                   <option value="DEF">DEF</option>
-                   <option value="GHI">GHI</option>
-                 </select>
+                 />
                  <label
-                   htmlFor="tipoExpediente"
+                   htmlFor="numeroExpediente"
                    className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                  >
-                   Tipo de Expediente
+                   Tipo de expediente
                  </label>
                </div>
-               <div className="relative z-0 w-full mb-6 group">
-                 
-                 <select
-                   id="documento"
-                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                   value={documento}
-                   onChange={(e) => setDocumento(e.target.value)}
-                 >
-                  <option value="" disabled hidden>Selecciona un tipo</option>
-                  {documentos.map((documentoN)=>(
-                    <option key={documentoN.id} value={documentoN.titulo_del_documento}>{documentoN.titulo_del_documento}</option>
-                  ))}
-                
-                 </select>
-                 <label
-                   htmlFor="tipoExpediente"
-                   className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                 >
-                   Tipo de Expediente
-                 </label>
-               </div>
-        
+               {/*Numero de expediente */}
                <div className="relative z-0 w-full mb-6 group">
                  <input
                    type="text"
@@ -234,12 +178,27 @@
                    Número de Expediente
                  </label>
                </div>
+               
              </div>
 
              <div className="grid grid-cols-1 gap-4 mb-4">
+              {/*Tag*/}
                {tags.map((tag, index) => (
                  <div key={index} className="relative z-0 flex items-center group">
-                   <select
+                   <input
+                    type="text"
+                    value={tag}
+                    place=" "
+                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focues:ring-0 focus:border-blue-600 peer"
+                    onChange={(e)=>manejarCambioTag(index,e.target.value)}
+                   ></input>
+                   <label 
+                    htmlFor="numeroExpediente"
+                    className="absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                   >
+                    Tag
+                   </label>
+                   {/*<select
                      className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                      value={tag}
                      onChange={(e) => manejarCambioTag(index, e.target.value)}
@@ -248,7 +207,7 @@
                      <option value="123">123</option>
                      <option value="456">456</option>
                      <option value="789">789</option>
-                   </select>
+               </select>*/}
                    <button
                      type="button"
                      className="ml-2 text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none"
@@ -297,11 +256,11 @@
              {expedientes.length > 0 ? (
                expedientes.map((expediente, index) => (
                  <tr key={index} className="border-t">
-                   <td className="px-6 py-4">{expediente.tipoExpediente}</td>
+                   <td className="px-6 py-4">{expediente.tipo}</td>
                    <td className="px-6 py-4">{expediente.numeroExpediente}</td>
-                   <td className="px-6 py-4">{expediente.status}</td>
-                   <td className="px-6 py-4">{expediente.ultimaActualizacion}</td>
-                   <td className="px-6 py-4">{expediente.acceso}</td>
+                   <td className="px-6 py-4">{expediente.tags}</td>
+                   <td className="px-6 py-4">{expediente.ultimaModificacion}</td>
+                   {/*<td className="px-6 py-4">{expediente.acceso}</td>*/}
                    <td className="px-6 py-4 flex space-x-4">
                      <button
                        onClick={() => editarExpediente(index)}
