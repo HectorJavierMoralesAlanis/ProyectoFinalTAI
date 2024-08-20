@@ -82,8 +82,6 @@ function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <button onClick={inicioS} className="button">Iniciar Sesión</button>
-                <a onClick={() => navigate('/register')} className="link">¿No tienes una cuenta? Regístrate</a>
-                {respuesta && <p className="form-message">{respuesta.message}</p>}
             </div>
         </div>
     );

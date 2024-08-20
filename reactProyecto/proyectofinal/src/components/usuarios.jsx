@@ -48,7 +48,6 @@ function Usuarios() {
                 <h1 className="title">Usuarios</h1>
                 <div className="actions">
                     <button className="button" onClick={() => setIsAgregarModalOpen(true)}>Agregar Usuario</button>
-                    <button className="button">Departamentos</button>
                 </div>
             </div>
 
