@@ -1,47 +1,90 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ModalAgregarUsuario from "./ModalAgregarUsuario";
 import ModalEditarUsuario from "./ModalEditarUsuario";
 import '../styles/usuarios.css';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-function ButtonLink({to,children,className}){
+function ButtonLink({ to, children, className }) {
     return <Link to={to} className={className}>{children}</Link>
 }
+
 function Usuarios() {
     const [usuarios, setUsuarios] = useState([]);
-    const [respuesta, setRespuesta] = useState(null);
-
-    
-    async function mostrar(){
-        const res = await fetch('http://127.0.0.1:3030/mostrar-users');
-        const jsonRes = await res.json();
-        setUsuarios(jsonRes);
-    }
-
     const [isAgregarModalOpen, setIsAgregarModalOpen] = useState(false);
     const [isEditarModalOpen, setIsEditarModalOpen] = useState(false);
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+
+    async function mostrar() {
+        try {
+            const res = await fetch('http://127.0.0.1:3030/mostrar-users');
+            const jsonRes = await res.json();
+            setUsuarios(jsonRes);
+        } catch (error) {
+            console.error("Error al cargar los usuarios:", error);
+            alert("No se pudieron cargar los usuarios. Por favor, intenta de nuevo.");
+        }
+    }
+
+    useEffect(() => {
+        mostrar();
+    }, []);
 
     const handleAddUser = (newUser) => {
         setUsuarios([...usuarios, newUser]);
     };
 
-    const handleEditUser = (updatedUser) => {
-        setUsuarios(
-            usuarios.map((usuario) =>
-                usuario.username === usuarioSeleccionado.username ? updatedUser : usuario
-            )
-        );
+    const handleEditUser = async (updatedUser) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:3030/editar-user/${updatedUser.username}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedUser),
+            });
+            if (response.ok) {
+                setUsuarios(
+                    usuarios.map((usuario) =>
+                        usuario.username === usuarioSeleccionado.username ? updatedUser : usuario
+                    )
+                );
+                setIsEditarModalOpen(false);
+            } else {
+                const errorMessage = await response.text();
+                console.error("Error al editar el usuario:", errorMessage);
+                alert("No se pudo editar el usuario. Por favor, intenta de nuevo.");
+            }
+        } catch (error) {
+            console.error("Error al conectar con el servidor:", error);
+            alert("No se pudo conectar con el servidor. Por favor, intenta de nuevo.");
+        }
     };
 
+    const handleDeleteUser = async (username) => {
+        try {
+            console.log('Eliminando usuario:', username); // Log para verificar el username
+            const response = await fetch(`http://127.0.0.1:3030/eliminar-user/${username}`, {
+                method: 'DELETE',
+            });
+            console.log('Respuesta del servidor:', response); // Log para ver la respuesta del servidor
+            if (response.ok) {
+                setUsuarios(usuarios.filter((usuario) => usuario.username !== username));
+            } else {
+                const errorMessage = await response.text();
+                console.error("Error al eliminar el usuario:", errorMessage);
+                alert("No se pudo eliminar el usuario. Por favor, intenta de nuevo.");
+            }
+        } catch (error) {
+            console.error("Error al conectar con el servidor:", error);
+            alert("No se pudo conectar con el servidor. Por favor, intenta de nuevo.");
+        }
+    };
+    
     const handleOpenEditModal = (usuario) => {
         setUsuarioSeleccionado(usuario);
         setIsEditarModalOpen(true);
     };
-    useEffect(()=>{
-        mostrar()
-        
-    },[])
+
     return (
         <div className="usuarios-container">
             <div className="header">
@@ -78,7 +121,7 @@ function Usuarios() {
                             <td>{usuario.departamento}</td>
                             <td>
                                 <button className="button-action" onClick={() => handleOpenEditModal(usuario)}>Editar</button>
-                                <button className="button-action">Eliminar</button>
+                                <button className="button-action" onClick={() => handleDeleteUser(usuario.username)}>Eliminar</button>
                             </td>
                         </tr>
                     ))}
